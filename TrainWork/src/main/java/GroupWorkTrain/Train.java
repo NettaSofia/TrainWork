@@ -6,17 +6,13 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 
 import java.net.URI;
 import java.net.URL;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/*
-Vaatii Jackson kirjaston:
-File | Project Structure
-Libraries >> Add >> Maven
-Etsi "jackson-databind", valitse esimerkiksi versio 2.0.5
-Asentuu Jacksonin databind, sekä core ja annotations
- */
 
 public class Train {
     public static void main(String[] args) {
@@ -33,7 +29,7 @@ public class Train {
             List<Juna> junat = mapper.readValue(url, tarkempiListanTyyppi);  // pelkkä List.class ei riitä tyypiksi
             System.out.println(junat.get(0).getTrainNumber());
             // Seuraavaa varten on toteutettava GroupWorkTrain.TimeTableRow luokka:
-            //System.out.println(junat.get(0).getTimeTableRows().get(0).getScheduledTime());
+            System.out.println(junat.get(0).getTimeTableRows().get(0).getScheduledTime());
             System.out.println("\n\n");
             System.out.println(junat.get(0));
 
@@ -173,4 +169,90 @@ class Juna {
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 class TimeTableRow {
+   boolean trainStopping;
+   String stationShortCode;
+   int stationUICCode;
+   String countryCode;
+   String type;
+   String commercialTrack;
+   boolean cancelled;
+   String scheduledTime;
+
+    public boolean isTrainStopping() {
+        return trainStopping;
+    }
+
+    public void setTrainStopping(boolean trainStopping) {
+        this.trainStopping = trainStopping;
+    }
+
+    public String getStationShortCode() {
+        return stationShortCode;
+    }
+
+    public void setStationShortCode(String stationShortCode) {
+        this.stationShortCode = stationShortCode;
+    }
+
+    public int getStationUICCode() {
+        return stationUICCode;
+    }
+
+    public void setStationUICCode(int stationUICCode) {
+        this.stationUICCode = stationUICCode;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
+
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getCommercialTrack() {
+        return commercialTrack;
+    }
+
+    public void setCommercialTrack(String commercialTrack) {
+        this.commercialTrack = commercialTrack;
+    }
+
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    public void setCancelled(boolean cancelled) {
+        this.cancelled = cancelled;
+    }
+
+    public String getScheduledTime() {
+        return scheduledTime;
+    }
+
+    public void setScheduledTime(String scheduledTime) {
+        this.scheduledTime = scheduledTime;
+    }
+
+    @Override
+    public String toString() {
+        return "TimeTableRow{" +
+                "trainStopping=" + trainStopping +
+                ", stationShortCode='" + stationShortCode + '\'' +
+                ", stationUICCode=" + stationUICCode +
+                ", countryCode='" + countryCode + '\'' +
+                ", type='" + type + '\'' +
+                ", commercialTrack='" + commercialTrack + '\'' +
+                ", cancelled=" + cancelled +
+                ", scheduledTime='" + scheduledTime + '\'' +
+                '}';
+    }
 }
