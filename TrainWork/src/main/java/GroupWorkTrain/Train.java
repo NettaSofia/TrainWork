@@ -55,7 +55,40 @@ public class Train {
         }
         return null;
     }
+    public String makeTrainsReadable(Juna j, String destination) {
+        StationList sl = new StationList();
+        int indeksi = 0;
+        String destinationAndTime = null;
+        while(indeksi<j.getTimeTableRows().size()){
+                 if (j.getTimeTableRows().get(indeksi).getStationShortCode().equals(destination)){
+                     destinationAndTime = j.getTimeTableRows().get(indeksi).getStationShortCode() +", " +j.getTimeTableRows().get(indeksi).getScheduledTime();
+                 }
 
+            }return j.getTimeTableRows().get(0).getStationShortCode() +j.getTimeTableRows().get(0).getScheduledTime() +destinationAndTime +j.getTimeTableRows().get(j.getTimeTableRows().size()).getStationShortCode() +j.getTimeTableRows().get(j.getTimeTableRows().size()).getScheduledTime();
+        }
+
+    public static String makeTrainsReadable(Juna j) {
+        StationList sl = new StationList();
+        String[] split1 = j.getTimeTableRows().get(0).getScheduledTime().split("T");
+        String departureTime =  split1[1].substring(0,7);
+        String[] split2 = j.getTimeTableRows().get(j.getTimeTableRows().size()-1).getScheduledTime().split("T");
+        String arrivalTime = split2[1].substring(0,7);
+        return sl.convertShortNameToLongName(j.getTimeTableRows().get(0).getStationShortCode()) +" lähtöaika:" +departureTime +" " +sl.convertShortNameToLongName(j.getTimeTableRows().get(j.getTimeTableRows().size()-1).getStationShortCode()) +" saapuminen:" +arrivalTime;
+    }
+
+
+    public List<Juna> listTrainsGoingToStation(String station, List<Juna> list) {
+        List<Juna> listOfTrainsGoingToStation = new ArrayList<>();
+        for(Juna j : list) {
+            int indeksi = 0;
+            while(indeksi<j.getTimeTableRows().size()){
+                if(j.getTimeTableRows().get(indeksi).getStationShortCode().equals(station)){
+                    listOfTrainsGoingToStation.add(j);
+                } indeksi++;
+            }
+        }
+        return listOfTrainsGoingToStation;
+    }
 }
 
 
@@ -77,9 +110,8 @@ class Juna {
 
     @Override
     public String toString() {
-        return "GroupWorkTrain.Juna{" + "cancelled=" + cancelled + ", commuterLineID='" + commuterLineID + '\'' + ", departureDate=" + departureDate + ", operatorShortCode='" + operatorShortCode + '\'' + ", operatorUICCode=" + operatorUICCode + ", runningCurrently=" + runningCurrently + ", timeTableRows=" + timeTableRows + ", timetableAcceptanceDate=" + timetableAcceptanceDate + ", timetableType='" + timetableType + '\'' + ", trainCategory='" + trainCategory + '\'' + ", trainNumber=" + trainNumber + ", trainType='" + trainType + '\'' + ", version=" + version + '}';
+        return timeTableRows.toString()+"\n";
     }
-
     public boolean isCancelled() {
         return cancelled;
     }
@@ -262,15 +294,6 @@ class TimeTableRow {
 
     @Override
     public String toString() {
-        return "TimeTableRow{" +
-                "trainStopping=" + trainStopping +
-                ", stationShortCode='" + stationShortCode + '\'' +
-                ", stationUICCode=" + stationUICCode +
-                ", countryCode='" + countryCode + '\'' +
-                ", type='" + type + '\'' +
-                ", commercialTrack='" + commercialTrack + '\'' +
-                ", cancelled=" + cancelled +
-                ", scheduledTime='" + scheduledTime + '\'' +
-                '}' +"\n" ;
+        return stationShortCode + scheduledTime;
     }
 }
