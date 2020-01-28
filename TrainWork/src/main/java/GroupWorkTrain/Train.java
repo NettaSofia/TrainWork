@@ -37,6 +37,24 @@ public class Train {
             System.out.println(ex);
         }
     }
+    public List<Juna> lueJunanJSONDataListaan(String asema) {
+        String baseurl = "https://rata.digitraffic.fi/api/v1";
+        String urlLoppu ="%s/live-trains/station/" +asema +"/";
+        try {
+            URL url = new URL(URI.create(String.format(urlLoppu, baseurl)).toASCIIString());
+            ObjectMapper mapper = new ObjectMapper();
+            CollectionType tarkempiListanTyyppi = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Juna.class);
+            System.out.println(tarkempiListanTyyppi);
+            List<Juna> junat = mapper.readValue(url, tarkempiListanTyyppi);  // pelkkä List.class ei riitä tyypiksi
+            return junat;
+
+
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return null;
+    }
 
 }
 
@@ -253,6 +271,6 @@ class TimeTableRow {
                 ", commercialTrack='" + commercialTrack + '\'' +
                 ", cancelled=" + cancelled +
                 ", scheduledTime='" + scheduledTime + '\'' +
-                '}';
+                '}' +"\n" ;
     }
 }
