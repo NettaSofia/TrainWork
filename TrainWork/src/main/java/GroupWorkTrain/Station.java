@@ -168,15 +168,14 @@ public class Station {
                 stationsInCity.add(stationNameAndShort);
             }
         }
-        System.out.println(stationsInCity);
         return stationsInCity;
     }
 
-    public List<Station> listOnlyPassengerStations(List<Station> list) {
+    public static List<Station> listOnlyPassengerStations(List<Station> list) {
         List<Station> passengerStations = new ArrayList<>();
         for (Station s : list) {
             if(s.isPassengerTraffic()){
-                System.out.println(s);
+                passengerStations.add(s);
             }
         }
         return passengerStations;
