@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Train {
     public static void main(String[] args) {
-        lueJunanJSONData();
+        Interface.run();
     }
 
 
@@ -152,7 +152,7 @@ public class Train {
         return listOfTrainsGoingToStation;
     }
 
-    public List<Juna> listaJunastaJotkaMenevatAsemastaAAsemaanB(String asemaA, String asemaB) {
+    public static List<Juna> listaJunastaJotkaMenevatAsemastaAAsemaanB(String asemaA, String asemaB) {
         StationList sl = new StationList();
         String baseurl = "https://rata.digitraffic.fi/api/v1";
         String shortA = sl.convertLongNametoShortName(asemaA);
