@@ -33,17 +33,18 @@ public class StationList extends ArrayList {
         }
         return shortName;
     }
-    public boolean isStation(String longName) {
+    public void isStation(String longName) {
         String kaupunkiJaAsema = (longName + " asema");
         for (Station s : list) {
             if ((s.getStationName().toUpperCase().equals(longName.toUpperCase()) || s.getStationName().toUpperCase().equals(kaupunkiJaAsema.toUpperCase()))) {
-                return true;
+                return;
             }
         }
         System.out.println("Syöte ei ole asema");
-        Interface.run();
-        return false;
+            Interface.run();
+
     }
+
     public List<String> searchStations(String city) {
         List<String> stationsInCity = new ArrayList<>();
         for(Station s : list){
