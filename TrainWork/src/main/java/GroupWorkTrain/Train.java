@@ -186,12 +186,8 @@ public class Train {
             List<Juna> junat = mapper.readValue(url, tarkempiListanTyyppi);  // pelkkä List.class ei riitä tyypiksi
 
             return junat;
-        } catch (MismatchedInputException e) {
-            System.out.println("Hakemasi asemien väliltä ei löydy yhteyttä.");
-            System.out.println("Kokeile toinen haku:");
-            Interface.run();
-        } catch (Exception ex) {
-            System.out.println(ex);
+        }  catch (Exception ex) {
+            System.out.println();
         }
         return null;
     }
