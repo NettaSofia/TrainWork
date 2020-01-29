@@ -26,13 +26,27 @@ public class TrainTest {
         assertNotNull(goingToStation);
     }
 
+  //  @Test
+    //public void testMethodListTrainsGoingFRomStationAtoStationB(){
+      //  List<Juna> lista= listaJunastaJotkaMenevatAsemastaAAsemaanB("Vaasa","Tampere");
+        //for(Juna j :lista) {
+          //  System.out.println(printTrainTimesAtStationAandB(j, "Vaasa", "Tampere"));
+       // }
+       //assertNotNull(lista);
+    //}
+
     @Test
-    public void testMethodListTrainsGoingFRomStationAtoStationB(){
-        List<Juna> lista= listaJunastaJotkaMenevatAsemastaAAsemaanB("Vaasa","Tampere");
+    public void testMethod2ListTrainsGoingFRomStationAtoStationB(){
+        List<Juna> lista= toinenListaJunastaJotkaMenevatAsemastaAAsemaanB("Vaasa", "Tampere");
         for(Juna j :lista) {
             System.out.println(printTrainTimesAtStationAandB(j, "Vaasa", "Tampere"));
         }
-       assertNotNull(lista);
+        assertNotNull(lista);
+    }
+    @Test
+    public void testaaKahdellavaihdolla(){
+        listaJunastaPaikastaApaikkaanByhdellaVaihdolla("Kemijärvi","Imatra");
+        assertNotNull(listaJunastaJotkaMenevatAsemastaAAsemaanB("Kemijärvi","Imatra"));
     }
 
 

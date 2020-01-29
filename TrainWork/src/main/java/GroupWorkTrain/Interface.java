@@ -1,5 +1,9 @@
 package GroupWorkTrain;
 
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static GroupWorkTrain.Train.listaJunastaJotkaMenevatAsemastaAAsemaanB;
@@ -13,11 +17,20 @@ public class Interface {
         String lahtoasema = scanner.nextLine();
         System.out.println("Syötä päätepysäkki: ");
         String paatepysakki = scanner.nextLine();
-        listaJunastaJotkaMenevatAsemastaAAsemaanB(lahtoasema, paatepysakki);
-        for (Juna j : listaJunastaJotkaMenevatAsemastaAAsemaanB(lahtoasema, paatepysakki)) {
-            System.out.println(printTrainTimesAtStationAandB(j, lahtoasema, paatepysakki));
+        List<Juna> list = new ArrayList<>();
+        try {
+            list = listaJunastaJotkaMenevatAsemastaAAsemaanB(lahtoasema, paatepysakki);
+        }
+        catch (NullPointerException e) {
+            System.out.println("Hakemiesi asemien väliltä ei löydy yhteyksiä.");
+            Interface.run();
+        }
 
+        for (Juna j : list) {
+                System.out.println(printTrainTimesAtStationAandB(j, lahtoasema, paatepysakki));
+
+            }
         }
 
     }
-}
+
