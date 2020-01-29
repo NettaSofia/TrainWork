@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Train {
     public static void main(String[] args) {
-        lueJunanJSONData();
+        Interface.run();
     }
 
 
