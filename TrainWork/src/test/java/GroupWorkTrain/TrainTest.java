@@ -4,8 +4,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static GroupWorkTrain.Train.makeTrainsReadable;
-import static GroupWorkTrain.Train.printTrainTimesAtStationAandB;
+import static GroupWorkTrain.Train.*;
 import static org.junit.Assert.*;
 
 public class TrainTest {
@@ -27,14 +26,27 @@ public class TrainTest {
         assertNotNull(goingToStation);
     }
 
+  //  @Test
+    //public void testMethodListTrainsGoingFRomStationAtoStationB(){
+      //  List<Juna> lista= listaJunastaJotkaMenevatAsemastaAAsemaanB("Vaasa","Tampere");
+        //for(Juna j :lista) {
+          //  System.out.println(printTrainTimesAtStationAandB(j, "Vaasa", "Tampere"));
+       // }
+       //assertNotNull(lista);
+    //}
+
     @Test
-    public void testMethodListTrainsGoingFRomStationAtoStationB(){
-        Train t = new Train();
-       List<Juna> lista= t.listaJunastaJotkaMenevatAsemastaAAsemaanB("Vaasa","Tampere");
+    public void testMethod2ListTrainsGoingFRomStationAtoStationB(){
+        List<Juna> lista= toinenListaJunastaJotkaMenevatAsemastaAAsemaanB("Vaasa", "Tampere");
         for(Juna j :lista) {
             System.out.println(printTrainTimesAtStationAandB(j, "Vaasa", "Tampere"));
         }
-       assertNotNull(lista);
+        assertNotNull(lista);
+    }
+    @Test
+    public void testaaKahdellavaihdolla(){
+        listaJunastaPaikastaApaikkaanByhdellaVaihdolla("Kemijärvi","Imatra");
+        assertNotNull(listaJunastaJotkaMenevatAsemastaAAsemaanB("Kemijärvi","Imatra"));
     }
 
 

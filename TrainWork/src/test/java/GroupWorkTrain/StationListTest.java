@@ -28,5 +28,15 @@ public class StationListTest {
         StationList l = new StationList();
         assertEquals("Helsinki asema", l.convertShortNameToLongName("HKI"));
     }
+    @Test
+    public void isStationTunnistaaEttaHelsinkiOnAsema(){
+        StationList l = new StationList();
+        assertTrue(l.isStation("Helsinki"));
+    }
+    @Test
+    public void SoderkullaEiOleAsema(){
+        StationList l = new StationList();
+        assertTrue(l.isStation("Söderkulla"));
+    }
 
 }

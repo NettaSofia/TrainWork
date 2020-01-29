@@ -2,6 +2,7 @@ package GroupWorkTrain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.databind.type.CollectionType;
 
 import javax.management.StringValueExp;
@@ -10,6 +11,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -184,6 +186,83 @@ public class Train {
             List<Juna> junat = mapper.readValue(url, tarkempiListanTyyppi);  // pelkkä List.class ei riitä tyypiksi
 
             return junat;
+        } catch (MismatchedInputException e) {
+            System.out.println("Hakemasi asemien väliltä ei löydy yhteyttä.");
+            System.out.println("Kokeile toinen haku:");
+            Interface.run();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return null;
+    }
+
+    public static List<Juna> toinenListaJunastaJotkaMenevatAsemastaAAsemaanB(String asemaA, String asemaB) {
+        StationList sl = new StationList();
+        String baseurl = "https://rata.digitraffic.fi/api/v1";
+        String shortA = sl.convertLongNametoShortName(asemaA);
+        String shortB = sl.convertLongNametoShortName(asemaB);
+        String urlLoppu ="%s/live-trains/station/" +shortA +"?departing_trains=20&include_nonstopping=false";
+        try {
+            URL url = new URL(URI.create(String.format(urlLoppu, baseurl)).toASCIIString());
+            ObjectMapper mapper = new ObjectMapper();
+            CollectionType tarkempiListanTyyppi = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Juna.class);
+            List<Juna> junat = mapper.readValue(url, tarkempiListanTyyppi);
+            List<Juna> junatAsemastaAAsemaanB = new ArrayList<>();
+            for(Juna j : junat){
+                int indeksi = 0;
+                while(indeksi<j.getTimeTableRows().size()){
+                    if(shortB.equals(j.getTimeTableRows().get(indeksi).getStationShortCode())){
+                        junatAsemastaAAsemaanB.add(j);
+                    }
+                    indeksi++;
+                }
+            }
+
+            return junatAsemastaAAsemaanB;
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return null;
+    }
+
+    public static HashMap<String, List<Juna>> listaJunastaPaikastaApaikkaanByhdellaVaihdolla(String asemaA, String asemaB) {
+        StationList sl = new StationList();
+        String baseurl = "https://rata.digitraffic.fi/api/v1";
+        String shortA = sl.convertLongNametoShortName(asemaA);
+        String shortB = sl.convertLongNametoShortName(asemaB);
+        String urlLoppu ="%s/live-trains/station/" +shortA +"?departing_trains=20&include_nonstopping=false";
+        try {
+            URL url = new URL(URI.create(String.format(urlLoppu, baseurl)).toASCIIString());
+            ObjectMapper mapper = new ObjectMapper();
+            CollectionType tarkempiListanTyyppi = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Juna.class);
+            List<Juna> junat = mapper.readValue(url, tarkempiListanTyyppi);
+            List<Juna> junatAsemastaAAsemaanB = new ArrayList<>();
+            HashMap<String, List<Juna>> vaihtopysakkiJaJunat = new HashMap<>();
+            for(Juna j : junat){
+                int indeksi = 0;
+                while(indeksi<j.getTimeTableRows().size()){
+                    if(shortB.equals(j.getTimeTableRows().get(indeksi).getStationShortCode())){
+                        junatAsemastaAAsemaanB.add(j);
+                    }
+                    indeksi++;
+                }
+                vaihtopysakkiJaJunat.put(sl.convertLongNametoShortName(asemaA),junatAsemastaAAsemaanB);
+            }
+            if (junatAsemastaAAsemaanB.isEmpty()){
+                for(Juna j : junat){
+                    for (TimeTableRow r : j.getTimeTableRows()){
+                        List<Juna> l = toinenListaJunastaJotkaMenevatAsemastaAAsemaanB(sl.convertShortNameToLongName(r.getStationShortCode()),asemaB);
+                        if(!(l.isEmpty())){
+                            vaihtopysakkiJaJunat.put(r.getStationShortCode(),l);
+                        }
+                    }
+
+                }
+
+            }
+            System.out.println(vaihtopysakkiJaJunat);
+            return vaihtopysakkiJaJunat;
 
         } catch (Exception ex) {
             System.out.println(ex);
