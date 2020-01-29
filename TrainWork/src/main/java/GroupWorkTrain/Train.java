@@ -4,20 +4,22 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 
+import javax.management.StringValueExp;
 import java.net.URI;
 import java.net.URL;
-import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 
 
 public class Train {
     public static void main(String[] args) {
         Interface.run();
     }
+
 
 
     private static void lueJunanJSONData() {
@@ -44,7 +46,7 @@ public class Train {
             URL url = new URL(URI.create(String.format(urlLoppu, baseurl)).toASCIIString());
             ObjectMapper mapper = new ObjectMapper();
             CollectionType tarkempiListanTyyppi = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Juna.class);
-            System.out.println(tarkempiListanTyyppi);
+
             List<Juna> junat = mapper.readValue(url, tarkempiListanTyyppi);  // pelkkä List.class ei riitä tyypiksi
             return junat;
 
@@ -86,7 +88,11 @@ public class Train {
             if (j.getTimeTableRows().get(indeksi).getStationShortCode().equals(a)){
                 asA = sl.convertShortNameToLongName(j.getTimeTableRows().get(indeksi).getStationShortCode());
                 String[]split3 =j.getTimeTableRows().get(indeksi).getScheduledTime().split("T");
-                aTime = split3[1].substring(0,7);
+                //aTime = split3[1].substring(0,7);
+                int aika = Integer.parseInt(split3[1].substring(0,1));
+                int tulos = aika + 2;
+                aTime = (tulos) + split3[1].substring(2, 7);
+
             }
             if (j.getTimeTableRows().get(indeksi).getStationShortCode().equals(b)){
                 asB = sl.convertShortNameToLongName(j.getTimeTableRows().get(indeksi).getStationShortCode());
@@ -100,7 +106,7 @@ public class Train {
         String departureTime =  split1[1].substring(0,7);
         String[] split2 = j.getTimeTableRows().get(j.getTimeTableRows().size()-1).getScheduledTime().split("T");
         String arrivalTime = split2[1].substring(0,7);
-        return "Juna lähtee asemalta:" +sl.convertShortNameToLongName(j.getTimeTableRows().get(0).getStationShortCode()) +" klo: " +departureTime +", " +asA +"lähtö:  " +aTime +" "+asB +" saapuminen:"+bTime  +"junan päätepysäkki: on: " +sl.convertShortNameToLongName(j.getTimeTableRows().get(j.getTimeTableRows().size()-1).getStationShortCode()) +" johon se saapuu:" +arrivalTime;
+        return "Juna lähtee asemalta:" +sl.convertShortNameToLongName(j.getTimeTableRows().get(0).getStationShortCode()) +" klo: " +departureTime +", " +asA +"lähtö:  " + aTime +" "+asB +" saapuminen:"+bTime  +"junan päätepysäkki: on: " +sl.convertShortNameToLongName(j.getTimeTableRows().get(j.getTimeTableRows().size()-1).getStationShortCode()) +" johon se saapuu:" +arrivalTime;
     }
     public static String printTrainTimesAtStationAandB(Juna j, String asemaA, String asemaB) {
         StationList sl = new StationList();
@@ -116,17 +122,30 @@ public class Train {
                 asA = sl.convertShortNameToLongName(j.getTimeTableRows().get(indeksi).getStationShortCode());
                 String[]split3 =j.getTimeTableRows().get(indeksi).getScheduledTime().split("T");
                 aTime = split3[1].substring(0,7);
+                int lahtoaika = Integer.valueOf(split3[1].substring(0,2));
+                int uusiLahtoaika = lahtoaika + 2;
+                if(uusiLahtoaika > 23){
+                    uusiLahtoaika -= 24;
+                }
+                aTime = uusiLahtoaika + split3[1].substring(2, 5);
             }
             if (j.getTimeTableRows().get(indeksi).getStationShortCode().equals(b) && asB == null){
                 asB = sl.convertShortNameToLongName(j.getTimeTableRows().get(indeksi).getStationShortCode());
                 String[]split3 =j.getTimeTableRows().get(indeksi).getScheduledTime().split("T");
                 bTime = split3[1].substring(0,7);
+                int perilla = Integer.valueOf(split3[1].substring(0,2));
+                int uusiPerilla = perilla + 2;
+                if(uusiPerilla > 23){
+                    uusiPerilla -= 24;
+                }
+                bTime = uusiPerilla + split3[1].substring(2,5);
+
             }
             indeksi++;
         }
 
 
-        return "Juna lähtee asemalta: " +asA +" klo: " +aTime +".   Juna saapuu asemalle: "+asB +" klo:"+bTime;
+        return "Juna lähtee asemalta: " +asA +" klo: " +aTime +"   Juna saapuu asemalle: "+asB +" klo: "+bTime;
     }
 
     public static String makeTrainsReadable(Juna j) {
@@ -135,7 +154,7 @@ public class Train {
         String departureTime =  split1[1].substring(0,7);
         String[] split2 = j.getTimeTableRows().get(j.getTimeTableRows().size()-1).getScheduledTime().split("T");
         String arrivalTime = split2[1].substring(0,7);
-        return sl.convertShortNameToLongName(j.getTimeTableRows().get(0).getStationShortCode()) +" lähtöaika:" +departureTime +" " +sl.convertShortNameToLongName(j.getTimeTableRows().get(j.getTimeTableRows().size()-1).getStationShortCode()) +" saapuminen:" +arrivalTime;
+        return sl.convertShortNameToLongName(j.getTimeTableRows().get(0).getStationShortCode()) +" lähtöaika:" + departureTime + " " +sl.convertShortNameToLongName(j.getTimeTableRows().get(j.getTimeTableRows().size()-1).getStationShortCode()) +" saapuminen:" + arrivalTime;
     }
 
 
@@ -162,7 +181,6 @@ public class Train {
             URL url = new URL(URI.create(String.format(urlLoppu, baseurl)).toASCIIString());
             ObjectMapper mapper = new ObjectMapper();
             CollectionType tarkempiListanTyyppi = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Juna.class);
-            System.out.println(tarkempiListanTyyppi);
             List<Juna> junat = mapper.readValue(url, tarkempiListanTyyppi);  // pelkkä List.class ei riitä tyypiksi
 
             return junat;
