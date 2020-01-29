@@ -152,7 +152,7 @@ public class Train {
         return listOfTrainsGoingToStation;
     }
 
-    public List<Juna> listaJunastaJotkaMenevatAsemastaAAsemaanB(String asemaA, String asemaB) {
+    public static List<Juna> listaJunastaJotkaMenevatAsemastaAAsemaanB(String asemaA, String asemaB) {
         StationList sl = new StationList();
         String baseurl = "https://rata.digitraffic.fi/api/v1";
         String shortA = sl.convertLongNametoShortName(asemaA);
@@ -164,6 +164,31 @@ public class Train {
             CollectionType tarkempiListanTyyppi = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Juna.class);
             System.out.println(tarkempiListanTyyppi);
             List<Juna> junat = mapper.readValue(url, tarkempiListanTyyppi);  // pelkkä List.class ei riitä tyypiksi
+
+            return junat;
+
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return null;
+    }
+
+    public static List<Juna> toinenListaJunastaJotkaMenevatAsemastaAAsemaanB(String asemaA, String asemaB) {
+        StationList sl = new StationList();
+        String baseurl = "https://rata.digitraffic.fi/api/v1";
+        String shortA = sl.convertLongNametoShortName(asemaA);
+        String shortB = sl.convertLongNametoShortName(asemaB);
+        String urlLoppu ="%s/live-trains/station/" +shortA +"?departing_trains=20&include_nonstopping=false";
+        try {
+            URL url = new URL(URI.create(String.format(urlLoppu, baseurl)).toASCIIString());
+            ObjectMapper mapper = new ObjectMapper();
+            CollectionType tarkempiListanTyyppi = mapper.getTypeFactory().constructCollectionType(ArrayList.class, Juna.class);
+            System.out.println(tarkempiListanTyyppi);
+            List<Juna> junat = mapper.readValue(url, tarkempiListanTyyppi);
+            List<Juna> junatAsemastaAAsemaanB = new ArrayList<>();
+            for(Juna j : junat){
+                int indeksi = 
+            }
 
             return junat;
 
