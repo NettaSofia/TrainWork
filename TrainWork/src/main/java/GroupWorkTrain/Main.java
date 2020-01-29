@@ -6,8 +6,8 @@ import static GroupWorkTrain.Station.readStationJSONdata;
 
 public class Main {
     public static void main(String[] args) {
-        Train trains = new Train();
-        StationList stationList = new StationList();
+        Interface i = new Interface();
+        i.run();
 
 
     }
