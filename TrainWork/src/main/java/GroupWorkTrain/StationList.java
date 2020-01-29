@@ -27,7 +27,7 @@ public class StationList extends ArrayList {
         String shortName = null;
         String kaupunkiJaAsema = (longName + " asema");
         for (Station s : list) {
-            if ((s.getStationName().equals(longName) || s.getStationName().equals(kaupunkiJaAsema))) {
+            if ((s.getStationName().toLowerCase().equals(longName.toLowerCase()) || s.getStationName().toLowerCase().equals(kaupunkiJaAsema.toLowerCase()))) {
                 shortName = s.getStationShortCode();
             }
         }
