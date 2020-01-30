@@ -44,9 +44,8 @@ public class TrainTest {
         assertNotNull(lista);
     }
     @Test
-    public void testaaKahdellavaihdolla(){
-        listaJunastaPaikastaApaikkaanByhdellaVaihdolla("Kemijärvi","Imatra");
-        assertNotNull(listaJunastaJotkaMenevatAsemastaAAsemaanB("Kemijärvi","Imatra"));
+    public void testaaVaihtoasemanetminineHaullaSavonlinnaJaJoensuuLoytyyParikkala(){
+        assertTrue(etsiVaihtoasemiaAsemienValilla("Savonlinna","Joensuu").contains("PAR"));
     }
 
 
